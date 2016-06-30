@@ -245,14 +245,16 @@
       this._setScrollTop(oldTop);
     },
     _detectViewport: function () {
-      var viewportOffsets = this.$viewportElement.offset(),
-        hasOffsets = viewportOffsets !== null && viewportOffsets !== undefined;
-
       this.viewportWidth = this.$viewportElement.width();
       this.viewportHeight = this.$viewportElement.height();
+      this.viewportOffsetTop = 0;
+      this.viewportOffsetLeft = 0;
 
-      this.viewportOffsetTop = (hasOffsets ? viewportOffsets.top : 0);
-      this.viewportOffsetLeft = (hasOffsets ? viewportOffsets.left : 0);
+      try {
+        var viewportOffsets = this.$viewportElement.offset();
+        this.viewportOffsetTop = viewportOffsets.top;
+        this.viewportOffsetLeft = viewportOffsets.left;
+      } catch(e) { }
     },
     _findParticles: function () {
       var self = this,
