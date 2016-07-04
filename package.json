@@ -1,7 +1,7 @@
 {
   "name": "jquery.stellar",
   "title": "Stellar.js - Shopify Edition",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Parallax scrolling made easy.",
   "homepage": "https://github.com/Shopify/stellar.js",
   "author": {
@@ -21,7 +21,7 @@
     }
   ],
   "dependencies": {
-    "jquery": ">=1.4.3"
+    "jquery": ">=1.10.1"
   },
   "bugs": "https://github.com/markdalgleish/stellar.js/issues",
   "repository": {

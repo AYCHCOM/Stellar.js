@@ -198,12 +198,12 @@
         $window = $(window);
 
       if (self.options.responsive) {
-        $window.bind('load.' + this.name, function () {
+        $window.on('load.' + this.name, function () {
           self.refresh();
         });
       }
 
-      $window.bind('resize.' + this.name, function () {
+      $window.on('resize.' + this.name, function () {
         self._detectViewport();
 
         if (self.options.responsive) {
@@ -229,7 +229,7 @@
 
       // Fix for WebKit background rendering bug
       if (options && options.firstLoad && /WebKit/.test(navigator.userAgent)) {
-        $(window).load(function () {
+        $(window).on('load', function () {
           var oldLeft = self._getScrollLeft(),
             oldTop = self._getScrollTop();
 
@@ -245,14 +245,16 @@
       this._setScrollTop(oldTop);
     },
     _detectViewport: function () {
-      var viewportOffsets = this.$viewportElement.offset(),
-        hasOffsets = viewportOffsets !== null && viewportOffsets !== undefined;
-
       this.viewportWidth = this.$viewportElement.width();
       this.viewportHeight = this.$viewportElement.height();
+      this.viewportOffsetTop = 0;
+      this.viewportOffsetLeft = 0;
 
-      this.viewportOffsetTop = (hasOffsets ? viewportOffsets.top : 0);
-      this.viewportOffsetLeft = (hasOffsets ? viewportOffsets.left : 0);
+      try {
+        var viewportOffsets = this.$viewportElement.offset();
+        this.viewportOffsetTop = viewportOffsets.top;
+        this.viewportOffsetLeft = viewportOffsets.left;
+      } catch(e) { }
     },
     _findParticles: function () {
       var self = this,
@@ -478,20 +480,20 @@
     destroy: function () {
       this._reset();
 
-      this.$scrollElement.unbind('resize.' + this.name).unbind('scroll.' + this.name);
+      this.$scrollElement.off('resize.' + this.name).off('scroll.' + this.name);
       this._animationLoop = $.noop;
 
-      $(window).unbind('load.' + this.name).unbind('resize.' + this.name);
+      $(window).off('load.' + this.name).off('resize.' + this.name);
     },
     _setOffsets: function () {
       var self = this,
         $window = $(window);
 
-      $window.unbind('resize.horizontal-' + this.name).unbind('resize.vertical-' + this.name);
+      $window.off('resize.horizontal-' + this.name).off('resize.vertical-' + this.name);
 
       if (typeof this.options.horizontalOffset === 'function') {
         this.horizontalOffset = this.options.horizontalOffset();
-        $window.bind('resize.horizontal-' + this.name, function () {
+        $window.on('resize.horizontal-' + this.name, function () {
           self.horizontalOffset = self.options.horizontalOffset();
         });
       } else {
@@ -500,7 +502,7 @@
 
       if (typeof this.options.verticalOffset === 'function') {
         this.verticalOffset = this.options.verticalOffset();
-        $window.bind('resize.vertical-' + this.name, function () {
+        $window.on('resize.vertical-' + this.name, function () {
           self.verticalOffset = self.options.verticalOffset();
         });
       } else {
@@ -606,7 +608,7 @@
         }
       };
 
-      this.$scrollElement.bind('scroll.' + this.name, requestTick);
+      this.$scrollElement.on('scroll.' + this.name, requestTick);
       requestTick();
     },
     _startAnimationLoop: function () {
